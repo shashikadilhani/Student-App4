@@ -1,10 +1,13 @@
 package com.example.demo.studentappjwt.entity;
 
 public class AuthenticationRequest {
-	
-private String username;
+
+//	private int id;
+//	private String email;
+	private String username;
 	
 	private String password;
+//	private String role;
 
 	public AuthenticationRequest() {
 		
@@ -26,10 +29,10 @@ private String username;
 	}
 
 	public AuthenticationRequest(String username, String password) {
-		 
+
 		this.username = username;
 		this.password = password;
 	}
-	
+
 
 }

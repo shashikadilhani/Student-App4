@@ -1,81 +1,111 @@
 package com.example.demo.studentappjwt.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table
-public class Student {
+@Table(name="student")
+@JsonIgnoreProperties({ "lastModifiedBy" })
+public class Student implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
-	
-	public Student(int id, String firstName, String lastName, String email) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-	}
-	
-	public Student(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-	}
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="id",unique = true)
+    private int id;
 
-	@Column(name="first_name")
-	private String firstName;
-	
-	@Column(name="last_name")
-	private String lastName;
-	
-	@Column(name="email")
-	private String email;
+    @Column
+    private String firstname;
 
-	public Student() {}
+    @Column
+    private String lastname;
 
-	public int getId() {
-		return id;
-	}
+    @Column
+    private String email;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("student")
+    private Set<Parent> parent;
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public Student() {
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getFirstname() {
+        return firstname;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
-	}
-	
-	
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Parent> getParent() {
+        return parent;
+    }
+    public void setParent(Set<Parent> parent) {
+        this.parent = parent;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
+
+
+    public Student(String firstname, String lastname, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(id, student.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+
 }
